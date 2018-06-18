@@ -4,6 +4,7 @@ import com.airhacks.rulz.jaxrsclient.JAXRSClientProvider;
 import org.junit.Rule;
 import org.junit.Test;
 
+import javax.json.JsonObject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -30,13 +31,22 @@ public class TodoResourceIT {
     }
 */
 
-    @Test
+/*    @Test
     public void fetchTodo() {
         Response response = this.jaxrsClientProvider.target().request(MediaType.TEXT_PLAIN).get();
         assertThat(response.getStatus(), is(200));
         String readEntity = response.readEntity(String.class);
         assertTrue(readEntity.startsWith("Hello"));
 
+    }*/
+
+    @Test
+    public void fetchTodo() {
+        Response response = this.jaxrsClientProvider.target().request(MediaType.APPLICATION_JSON).get();
+        assertThat(response.getStatus(), is(200));
+        JsonObject readEntity = response.readEntity(JsonObject.class);
+        assertTrue(readEntity.getString("caption").startsWith("implement"));
+        assertTrue(readEntity.getInt("priority") == 100);
     }
 
 
