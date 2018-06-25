@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+    <h:head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"/>
+        <title>Todo</title>
+    </h:head>
+    <h:body>
+        <h:form prependId="false">
+            <p:growl id="growl" life="2000"/>
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputText value="Caption:"/>
+                <input jsf:id="caption" placeholder="Caption" type="text" value="#{index.todo.caption}" class="form-input"/>
+
+                <h:outputText value="Description:"/>
+                <p:inputText value="#{index.todo.description}"/>
+
+                <h:outputText value="Priority:"/>
+                <p:inputText value="#{index.todo.priority}"/>
+            </h:panelGrid>
+            <p:commandButton value="Save" action="#{index.save}" update="growl, reminders" />
+        </h:form>
+
+        <p:dataList value="#{index.todos}" var="todo" type="ordered" id="reminders">
+            <f:facet name="header">
+                Reminders
+            </f:facet>
+            #{todo.caption}, #{todo.description}, #{todo.priority}
+        </p:dataList>
+    </h:body>
+</html>

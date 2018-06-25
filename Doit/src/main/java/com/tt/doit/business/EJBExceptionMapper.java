@@ -12,18 +12,13 @@ public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
     public Response toResponse(EJBException e) {
         Throwable cause = e.getCause();
 
-        Response unknownError = Response.serverError().header("cause", e.toString()).build();
-
-        if(cause == null) {
-            return unknownError;
-        }
-
         if(cause instanceof OptimisticLockException) {
             return Response.status(Response.Status.CONFLICT)
                     .header("cause", "conflict occurred: " + cause)
                     .build();
         }
 
-        return unknownError;
+        return Response.serverError().
+                header("cause", e.toString()).build();
     }
 }

@@ -4,11 +4,10 @@ import com.tt.doit.business.reminders.entity.Todo;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -16,6 +15,7 @@ import java.util.List;
 
 @Stateless
 @Path("todo")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class TodosResource {
     @Inject
     TodoManager todoManager;
@@ -31,7 +31,7 @@ public class TodosResource {
     }
 
     @POST
-    public Response save (Todo todo, @Context UriInfo uriInfo) {
+    public Response save (@Valid Todo todo, @Context UriInfo uriInfo) {
         Todo saved = this.todoManager.save(todo);
         long id = saved.getId();
         URI uri = uriInfo.getAbsolutePathBuilder().path("/" + id).build();

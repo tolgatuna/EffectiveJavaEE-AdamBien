@@ -44,7 +44,7 @@ public class TodoResourceIT {
             JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
             JsonObject object = objectBuilder.add("caption", "implement first todo item")
                     .add("description", "Description of Todo")
-                    .add("priority", 100)
+                    .add("priority", 1)
                     .build();
             Response response = this.jaxrsClientProvider.target().request().post(Entity.json(object));
             createdTodoPath = response.getHeaderString("Location");
@@ -59,7 +59,7 @@ public class TodoResourceIT {
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
         JsonObject object = objectBuilder.add("caption", "implement first todo item")
                 .add("description", "Description of Todo")
-                .add("priority", 100)
+                .add("priority", 1)
                 .build();
         Response postResponse = this.jaxrsClientProvider.target().request().post(Entity.json(object));
         assertThat(postResponse.getStatus(), is(201));
@@ -74,7 +74,7 @@ public class TodoResourceIT {
         assertThat(response.getStatus(), is(200));
         JsonObject readEntity = response.readEntity(JsonObject.class);
         assertTrue(readEntity.getString("caption").startsWith("implement"));
-        assertTrue(readEntity.getInt("priority") == 100);
+        assertTrue(readEntity.getInt("priority") == 1);
     }
     // Get All Todos
     @Test
@@ -143,5 +143,42 @@ public class TodoResourceIT {
         assertThat(response.getStatus(), is(400));
     }
 
+    @Test
+    public void createTodoWithoutCaption() {
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        JsonObject object = jsonObjectBuilder
+                .add("priority", 4)
+                .build();
+
+        Response response = this.jaxrsClientProvider.target().request().post(Entity.json(object));
+        assertThat(response.getStatus(), is(500 ));
+
+        response.getHeaders().entrySet().forEach(System.out::println);
+    }
+
+    @Test
+    public void createValidTodo() {
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        JsonObject object = jsonObjectBuilder
+                .add("priority", 9)
+                .add("caption", "12")
+                .build();
+
+        Response response = this.jaxrsClientProvider.target().request().post(Entity.json(object));
+        assertThat(response.getStatus(), is(201 ));
+    }
+
+    @Test
+    public void createTodoWithHighPriorityWithoutDescription() {
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        JsonObject object = jsonObjectBuilder
+                .add("priority", 24)
+                .add("caption", "12")
+                .build();
+
+        Response response = this.jaxrsClientProvider.target().request().post(Entity.json(object));
+        response.getHeaders().entrySet().forEach(System.out::println);
+        assertThat(response.getStatus(), is(500 ));
+    }
 
 }
